@@ -1,0 +1,4 @@
+pip-chill
+pylint
+python-dateutil
+requests
