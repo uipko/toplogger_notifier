@@ -40,12 +40,16 @@ def check(top_logger: TopLogger, item: QueueItem):
     """
     Check for available slot(s) based on given item
     """
+    available = 0
     if not item.handled:
         top_logger.gym = item.gym
         available_slots = top_logger.available_slots(item.period)
+        available = len(available_slots)
         if available_slots:
             notify(available_slots)
             item.handled = True
+
+    return available
 
 
 def repeat(top_logger):
@@ -53,12 +57,14 @@ def repeat(top_logger):
     Run check each INTERVAL seconds.
     """
     now = datetime.now()
+    available_slots = 0
+    print(f"{now}  --  START: check for {len(config.QUEUE)} slots")
     for item in config.QUEUE:
         # TODO: find out if the 10 days check is DB only
         if item.period.start <= (now + timedelta(10)):
-            check(top_logger, item)
+            available_slots += check(top_logger, item)
     # TODO: add proper logging
-    print(f"checked on {now}")
+    print(f"{now}  --  FINISH: found {available_slots} slots")
     time.sleep(config.INTERVAL)
     repeat(top_logger)
 
