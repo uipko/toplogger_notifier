@@ -33,7 +33,10 @@ def notify(slots):
     for slot in slots:
         #  TODO: would be nice to have a link to slot in message
         message += f"\n -> {slot.start_time.strftime('%H:%M')} - {slot.end_time.strftime('%H:%M')}"
-    Telegram(config.TOKEN, config.CHAT_ID).send_message(message)
+    if config.DEBUG:
+        print(f"DEBUG: message\n\t{message}")
+    else:
+        Telegram(config.TOKEN, config.CHAT_ID).send_message(message)
 
 
 def check(top_logger: TopLogger, item: QueueItem):
