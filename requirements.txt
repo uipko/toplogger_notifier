@@ -1,4 +1,5 @@
 pip-chill
+pygments
 pylint
 python-dateutil
 requests
