@@ -33,11 +33,8 @@ $ pip-chill --no-version > requirements.txt
 The following features could be implemented someday or not. The order of this list is not necessarely the order of implementation.
 
 TODO's:
-- [x] Add feature to load config options like:
-    - ToplLogger credentials
-    - Telegram REST API key
 - [ ] Add logging
 - [ ] Add unit tests
 - [ ] Persist data between runs
 - [ ] Add data of gyms
-- [ ] Add feature to make it possible to insert desired slots
+- [ ] Add feature to make it possible to CRUD desired slots

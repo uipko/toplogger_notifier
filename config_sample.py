@@ -3,16 +3,16 @@ All settings for this TopLogger script.
 
 Copy this file to config.py and make sure not to add config.py to git.
 """
-from models import Period
-from models import QueueItem
+# from models import Period
+# from models import QueueItem
 
 # TOP_LOGGER
-USER = ''
-PASSWORD = ''
+USER = '<CHANGE_ME>'
+PASSWORD = '<CHANGE_ME>'
 
 # TELEGRAM
-TOKEN = ''
-CHAT_ID = ''
+TOKEN = '<CHANGE_ME>'
+CHAT_ID = '<CHANGE_ME>'
 
 # SCRIPT SETTINGS
 # Time in seconds between to checks

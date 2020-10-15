@@ -11,7 +11,11 @@ import time
 from datetime import datetime
 from datetime import timedelta
 
-import config
+try:
+    import config
+except ImportError:
+    import config_sample as config
+
 from models import QueueItem
 from telegram import Telegram
 from toplogger import TopLogger
