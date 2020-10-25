@@ -1,7 +1,6 @@
 """
 This script can be used to notify you when a slot comes available at your favorite gym.
-
-Update the settings in config.py
+Update the settings in config.py.
 """
 import time
 from datetime import datetime
@@ -22,11 +21,8 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 
 def notify(telegram, slots):
-    """
-    Send Telegram notification for available slots.
-    """
-
-    if len(slots) == 0:
+    """Send Telegram notification for available slots."""
+    if not slots:
         return
 
     message = f"Slot(s) available at: {slots[0].date.strftime('%A %d %B')}"
@@ -41,9 +37,7 @@ def notify(telegram, slots):
 
 
 def check(top_logger, telegram, queue):
-    """
-    Check for available slot(s) based on given items in queue.
-    """
+    """Check for available slot(s) based on given items in queue."""
     now = datetime.now()
     # register last_run for command /status message
     telegram.set_last_run(now)
@@ -68,10 +62,7 @@ def check(top_logger, telegram, queue):
 
 
 def repeat(top_logger, telegram, interval, queue):
-    """
-    Run check each INTERVAL seconds.
-    """
-
+    """Run check each INTERVAL seconds."""
     check(top_logger, telegram, queue)
 
     if interval != -1:
@@ -84,7 +75,6 @@ def repeat(top_logger, telegram, interval, queue):
 def main():
     """
     Start Top Logger notifier.
-
     Make sure you've set all necessary settings in config.py
     """
     top_logger = TopLogger(config.USER, config.PASSWORD)

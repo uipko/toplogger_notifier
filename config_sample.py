@@ -1,18 +1,17 @@
 """
 All settings for this TopLogger script.
-
 Copy this file to config.py and make sure not to add config.py to git.
 """
 # from models import Period
 # from models import QueueItem
 
 # TOP_LOGGER
-USER = '<CHANGE_ME>'
-PASSWORD = '<CHANGE_ME>'
+USER = ''
+PASSWORD = ''
 
 # TELEGRAM
-TOKEN = '<CHANGE_ME>'
-CHAT_ID = '<CHANGE_ME>'
+TOKEN = ''
+CHAT_ID = ''
 
 # SCRIPT SETTINGS
 # do not send Telegram message

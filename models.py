@@ -1,10 +1,9 @@
-"""
-All class types used in this script.
-"""
+"""All class types used in this script."""
 from dateutil.parser import parse
 
 
 class QueueItem:
+
     """
     Class for holding Item data used for queueing checks for a slot.
     """
@@ -21,15 +20,16 @@ class QueueItem:
                f"{notified }"
 
     def set_handled(self, handled):
-        """
-        Set handled property.
-        """
+        """Set handled property."""
         self.handled = handled
 
 
 class Period:
+
     """
     Object for holding period data.
+
+    A period has a start and an end date, that's all.
     """
 
     def __init__(self, start, end):
@@ -41,6 +41,7 @@ class Period:
 
 
 class Gym:
+
     """
     Class for holding data of a TopLogger gym.
 
@@ -74,9 +75,7 @@ class Gym:
     """
 
     def __init__(self, gym):
-        """
-        Initialize object based on JSON slot object.
-        """
+        """Initialize object based on JSON slot object."""
         self.id = gym['id']
         self.name = gym["id_name"]
         self.slug = gym["slug"]
@@ -85,7 +84,11 @@ class Gym:
 
 
 class ReservationArea:
+
     """
+    Class for holding reservation area objects.
+
+    The JSON of this class looks like this
     {
         "id": 31,
         "name": "Bouldering",
@@ -94,15 +97,14 @@ class ReservationArea:
     """
 
     def __init__(self, area):
-        """
-        Initialize object based on JSON reservation_area object.
-        """
+        """Initialize object based on JSON reservation_area object."""
         self.id = area['id']
         self.name = area['name']
         self.capacity = area['capacity']
 
 
 class Slot:
+
     """
     Class for holding data of a Toplogger slot.
 
@@ -121,9 +123,7 @@ class Slot:
     """
 
     def __init__(self, slot):
-        """
-        Initialize object based on JSON slot object.
-        """
+        """Initialize object based on JSON slot object."""
         start_at = parse(slot['start_at'])
         end_at = parse(slot['end_at'])
         self.id = slot['id']
@@ -136,7 +136,5 @@ class Slot:
 
     @property
     def spots_available(self):
-        """
-        Calculate how many spots are available for this slot.
-        """
+        """Calculate how many spots are available for this slot."""
         return self.spots - self.spots_booked

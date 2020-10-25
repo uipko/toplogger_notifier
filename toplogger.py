@@ -1,6 +1,4 @@
-"""
-Module for interaction with TopLogger.
-"""
+"""Module for interaction with TopLogger."""
 import json
 
 import requests
@@ -9,6 +7,7 @@ from models import Slot
 
 
 class TopLogger:
+
     """
     Handle communication with TopLogger REST API.
     """
@@ -25,9 +24,7 @@ class TopLogger:
         self.login()
 
     def login(self):
-        """
-        Start session for REST API.
-        """
+        """Start session for REST API."""
         url = f'{self.host}/users/sign_in.json'
 
         data = {
@@ -37,17 +34,15 @@ class TopLogger:
             }
         }
 
-        response = requests.post(url, json = data)
+        response = requests.post(url, json=data)
         response.raise_for_status()
 
         content = response.json()
         self.token = content['authentication_token']
-        self.userid =  content['user_id']
+        self.userid = content['user_id']
 
     def available_slots(self, period):
-        """
-        Get available slots in given period.
-        """
+        """Get available slots in given period."""
         if not self.gym:
             raise Exception('Gym cannot be None')
 
@@ -66,9 +61,7 @@ class TopLogger:
         return available_slots
 
     def reservation_areas(self):
-        """
-        Get reservation_areas.
-        """
+        """Get reservation_areas."""
         if not self.gym:
             raise Exception('Gym cannot be None')
 
@@ -76,9 +69,7 @@ class TopLogger:
         return areas
 
     def gyms(self):
-        """
-        Get gyms.
-        """
+        """Get all available gyms."""
         gyms = self._get('gyms.json?json_params={"includes":["gym_resources"]}')
         for gym in gyms:
             if gym["id"] == 38:

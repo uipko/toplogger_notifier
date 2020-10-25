@@ -4,6 +4,10 @@
    :target: https://github.com/uipko/toplogger_notifier/
    :alt: Pylint
 
+.. image:: https://api.codacy.com/project/badge/Grade/b737729d31d440f0af5a5f1e115da148
+   :alt: Codacy Badge
+   :target: https://app.codacy.com/gh/uipko/toplogger_notifier?utm_source=github.com&utm_medium=referral&utm_content=uipko/toplogger_notifier&utm_campaign=Badge_Grade
+
 Table of contents
 =================
 
