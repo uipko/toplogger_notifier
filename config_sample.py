@@ -17,7 +17,7 @@ CHAT_ID = '<CHANGE_ME>'
 # SCRIPT SETTINGS
 # do not send Telegram message
 DEBUG = False
-# Time in seconds between to checks
+# Time in seconds between to checks, minimal=30, -1 => do not repeat
 INTERVAL = 60 * 60
 GYMS = {
     # Add here your gym, EG:

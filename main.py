@@ -1,29 +1,29 @@
 """
 This script can be used to notify you when a slot comes available at your favorite gym.
 
-Update the following settings in main.py:
-- USER      - TopLogger username (email)
-- PASSWORD  - TopLogger password
-- GYMS      - The id of the gyms you want to check
-- QUEUE     - List if gyms and periods to look at
+Update the settings in config.py
 """
 import time
 from datetime import datetime
 from datetime import timedelta
+import logging
+
+from telegram_bot import TelegramBot
 
 try:
     import config
 except ImportError:
     import config_sample as config
-
-from models import QueueItem
-from telegram import Telegram
 from toplogger import TopLogger
 
 
-def notify(slots):
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+
+
+def notify(telegram, slots):
     """
-    Send Telegram notification for available slots
+    Send Telegram notification for available slots.
     """
 
     if len(slots) == 0:
@@ -36,41 +36,66 @@ def notify(slots):
     if config.DEBUG:
         print(f"DEBUG: message\n\t{message}")
     else:
-        Telegram(config.TOKEN, config.CHAT_ID).send_message(message)
+        # TODO: get config.CHAT_ID from telegram-bot
+        telegram.bot.send_message(chat_id=config.CHAT_ID, text=message)
 
 
-def check(top_logger: TopLogger, item: QueueItem):
+def check(top_logger, telegram, queue):
     """
-    Check for available slot(s) based on given item
+    Check for available slot(s) based on given items in queue.
     """
+    now = datetime.now()
+    # register last_run for command /status message
+    telegram.set_last_run(now)
+
+    # TODO: add proper logging
+    print(f"{now}  --  START: check for {len(queue)} slots")
     available = 0
-    if not item.handled:
-        top_logger.gym = item.gym
-        available_slots = top_logger.available_slots(item.period)
-        available = len(available_slots)
-        if available_slots:
-            notify(available_slots)
-            item.handled = True
+    for item in queue:
+        # TODO: find out if the 10 days check is DB only
+        if now < item.period.start <= (now + timedelta(10)) and not item.handled:
+            top_logger.gym = item.gym
+            available_slots = top_logger.available_slots(item.period)
+            available += len(available_slots)
+            if available_slots:
+                notify(telegram, available_slots)
+                item.set_handled(True)
+
+    # TODO: add proper logging
+    print(f"{datetime.now()}  --  FINISH: found {available} slots")
 
     return available
 
 
-def repeat(top_logger):
+def repeat(top_logger, telegram, interval, queue):
     """
     Run check each INTERVAL seconds.
     """
-    now = datetime.now()
-    available_slots = 0
-    print(f"{now}  --  START: check for {len(config.QUEUE)} slots")
-    for item in config.QUEUE:
-        # TODO: find out if the 10 days check is DB only
-        if item.period.start <= (now + timedelta(10)):
-            available_slots += check(top_logger, item)
-    # TODO: add proper logging
-    print(f"{now}  --  FINISH: found {available_slots} slots")
-    time.sleep(config.INTERVAL)
-    repeat(top_logger)
+
+    check(top_logger, telegram, queue)
+
+    if interval != -1:
+        minimal_interval = 1 if config.DEBUG else 30
+        interval = max(minimal_interval, interval)
+        time.sleep(interval)
+        repeat(top_logger, telegram, interval, queue)
+
+
+def main():
+    """
+    Start Top Logger notifier.
+
+    Make sure you've set all necessary settings in config.py
+    """
+    top_logger = TopLogger(config.USER, config.PASSWORD)
+    queue = config.QUEUE
+    # setup telegram
+    telegram_bot = TelegramBot(config.TOKEN)
+    telegram_bot.set_queue(queue)
+
+    # start schedule
+    repeat(top_logger, telegram_bot, config.INTERVAL, queue)
 
 
 if __name__ == '__main__':
-    repeat(TopLogger(config.USER, config.PASSWORD))
+    main()

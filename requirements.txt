@@ -2,4 +2,5 @@ pip-chill
 pygments
 pylint
 python-dateutil
+python-telegram-bot
 requests

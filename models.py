@@ -14,6 +14,18 @@ class QueueItem:
         self.period = period
         self.handled = handled
 
+    def __str__(self):
+        notified = ' NOTIFIED' if self.handled else ''
+        return f"{self.gym['name']}  ::  {self.period.start.date()} " \
+               f"{self.period.start.strftime('%H:%M')} - {self.period.end.strftime('%H:%M')}" \
+               f"{notified }"
+
+    def set_handled(self, handled):
+        """
+        Set handled property.
+        """
+        self.handled = handled
+
 
 class Period:
     """

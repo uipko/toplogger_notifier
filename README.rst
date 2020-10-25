@@ -61,13 +61,18 @@ Copy :code:`config_sample.py` to :code:`config.py` and update all settings.
 
 Run TopLogger notifier
 ----------------------
-
 Start script and save 'logging' to file.
 
 .. code-block:: bash
 
     $ python -u ./main.py | tee `date -Iseconds`.log
 
+Telegram bot commands
+---------------------
+The TopLogger Notifier telegram bot provides the following commands:
+
+- status: Show last run & queued periods
+- reset: Reset notified periods so we will notified again if there's a available slot.
 
 Development
 ===========
