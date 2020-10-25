@@ -1,5 +1,34 @@
-TopLogger Notifier
-==================
+
+
+.. image:: https://github.com/uipko/toplogger_notifier/workflows/Pylint/badge.svg?branch=main
+   :target: https://github.com/uipko/toplogger_notifier/
+   :alt: Pylint
+
+Table of contents
+=================
+
+- `Introduction`_
+
+- `Prerequisites`_
+    - `TopLogger account`_
+    - `Telegram account & bot`_
+
+- `Installing`_
+    - `Setup environment`_
+    - `Configure script`_
+
+- `Usage`_
+    - `Run TopLogger notifier`_
+    - `Telegram bot commands`_
+
+- `Contributing`_
+    - `Updating dependencies`_
+
+- `Possible new features`_
+
+
+Introduction
+============
 Because of the COVID measures (in the Netherlands) reservations are obliged for a lot of activities,
 in this case sport climbing/bouldering. The number of slots are very limited (30 at the moment of
 writing). Some gyms are pretty popular and crowded. Hence, reservations are depleted pretty
@@ -34,8 +63,8 @@ For all of this to work you need to copy API token and chat_id (see:
 https://api.telegram.org/bot<TOKEN>/getUpdates ) to :code:`config.py`.
 
 
-Usage
-=====
+Installing
+==========
 No fancy packaging (yet). So if you want to use this script just clone the repo and run it.
 
 Go to an appropriate folder and clone this repository.
@@ -59,6 +88,9 @@ Copy :code:`config_sample.py` to :code:`config.py` and update all settings.
 
 *NB: Make sure not to add config.py to git because it contains your secrets.*
 
+Usage
+=====
+
 Run TopLogger notifier
 ----------------------
 Start script and save 'logging' to file.
@@ -74,11 +106,10 @@ The TopLogger Notifier telegram bot provides the following commands:
 - status: Show last run & queued periods
 - reset: Reset notified periods so we will notified again if there's a available slot.
 
-Development
-===========
+Contributing
+============
 If you're missing something and have some copious-free-time to to spare, feel free to create a
 pull request.
-
 
 Updating dependencies
 ---------------------
@@ -90,11 +121,11 @@ After installing a new dependency run the following to update requirements.txt.
 
     $ pip-chill --no-version > requirements.txt
 
-
 Possible new features
 =====================
-The following features could be implemented someday or not. The order of this list is not
-necessarily the order of implementation.
+The following features could be implemented someday or not. Hopefully this COVID situation will
+nog give me enough time to implement all these features.The order of this list is not necessarily
+the order of implementation.
 
 Idea's for new features:
 
