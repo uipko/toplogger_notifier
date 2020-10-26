@@ -1,5 +1,4 @@
-"""
-This script can be used to notify you when a slot comes available at your favorite gym.
+"""This script can be used to notify you when a slot comes available at your favorite gym.
 Update the settings in config.py.
 """
 import time
