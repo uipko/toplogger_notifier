@@ -45,7 +45,7 @@ class TelegramBot:
         Command handler to resets all queued items which are marked as handled.
         This command handler also sends a messages when done.
         """
-        for item in [item for item in context.bot_data['queue'] if item.handled]:
+        for item in context.bot_data['queue']:
             item.set_handled(False)
 
         context.bot.send_message(chat_id=update.effective_chat.id,

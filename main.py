@@ -33,7 +33,7 @@ def notify(telegram, slots):
         print(f"DEBUG: message\n\t{message}")
     else:
         # TODO: get config.CHAT_ID from telegram-bot
-        telegram.bot.send_message(chat_id=config.CHAT_ID, text=message)
+        telegram.updater.bot.send_message(chat_id=config.CHAT_ID, text=message)
 
 
 def check(top_logger, telegram, queue):
