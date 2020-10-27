@@ -134,9 +134,10 @@ the order of implementation.
 Idea's for new features:
 
 - Add logging
-- Setup pytest and unit tests for existing code
+- Setup pytest tests for existing code
 - Persist data between runs
-- Add data of gyms
+- List current reservations
+- Add a way to get data of gyms
 - Add packaging
 - Add feature to make it possible to CRUD desired slots
-- Add automagically booking of available slot
+- Add automagically make a reservation for an available slot
