@@ -76,7 +76,7 @@ def main():
     Start Top Logger notifier.
     Make sure you've set all necessary settings in config.py
     """
-    top_logger = TopLogger(config.USER, config.PASSWORD)
+    top_logger = TopLogger()
     queue = config.QUEUE
     # setup telegram
     telegram_bot = TelegramBot(config.TOKEN)

@@ -1,13 +1,10 @@
 """
 All settings for this TopLogger script.
-Copy this file to config.py and make sure not to add config.py to git.
+
+Copy this file to config.py and make sure not to add config.py (including your secrets) to git.
 """
 # from models import Period
 # from models import QueueItem
-
-# TOP_LOGGER
-USER = ''
-PASSWORD = ''
 
 # TELEGRAM
 TOKEN = ''
@@ -20,9 +17,13 @@ DEBUG = False
 INTERVAL = 60 * 60
 GYMS = {
     # Add here your gym, EG:
-    # 'delfts_bleau': {'id': 38, 'area_id': 31},
+    # The list of gyms can be found here:
+    # https://api.toplogger.nu/v1/gyms
+    # Find your favorite gym and check for reservation_areas. If there are reservation areas fill
+    # in the id, if not remove area_id.
+    # 'be_boulder_amsterdam': {'id': 100, 'area_id': 65},
 }
 QUEUE = [
     # Add here your periods of interest, EG:
-    # QueueItem(GYMS['delfts_bleau'], Period('2020-10-16 11:30', '2020-10-16 14:30')),
+    # QueueItem(GYMS['be_boulder_amsterdam'], Period('2020-10-16 11:30', '2020-10-16 14:30')),
 ]

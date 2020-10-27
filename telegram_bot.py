@@ -12,6 +12,7 @@ class TelegramBot:
         - reset: Reset the QueueItem.handled property so all queued item wil be checked again.
     """
     def __init__(self, token):
+        # TODO: check if there's already an updater running or handle exception
         self.updater = Updater(token=token)
         dispatcher = self.updater.dispatcher
 
