@@ -1,11 +1,17 @@
 """This script can be used to notify you when a slot comes available at your favorite gym.
 Update the settings in config.py.
 """
-import time
 from datetime import datetime
 from datetime import timedelta
 import logging
+import time
+from typing import Dict
+from typing import List
 
+from dateutil.tz import gettz
+
+from models import QueueItem
+from models import Slot
 from telegram_bot import TelegramBot
 
 try:
@@ -19,15 +25,14 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 
 
-def notify(telegram, slots):
+def notify(telegram: TelegramBot, item: QueueItem, slots: List[Slot]):
     """Send Telegram notification for available slots."""
     if not slots:
         return
 
-    message = f"Slot(s) available at: {slots[0].date.strftime('%A %d %B')}"
+    message = f"Slot(s) available at {item.gym['name']} on {slots[0].date.strftime('%A %d %B')}"
     for slot in slots:
-        #  TODO: would be nice to have a link to slot in message
-        message += f"\n -> {slot.start_time.strftime('%H:%M')} - {slot.end_time.strftime('%H:%M')}"
+        message += f"\n -> {slot.start_at.strftime('%H:%M')} - {slot.end_at.strftime('%H:%M')}"
     if config.DEBUG:
         print(f"DEBUG: message\n\t{message}")
     else:
@@ -35,9 +40,9 @@ def notify(telegram, slots):
         telegram.updater.bot.send_message(chat_id=config.CHAT_ID, text=message)
 
 
-def check(top_logger, telegram, queue):
+def check(top_logger: TopLogger, telegram: TelegramBot, queue: Dict[str, QueueItem]) -> int:
     """Check for available slot(s) based on given items in queue."""
-    now = datetime.now()
+    now = datetime.now(gettz())
     # register last_run for command /status message
     telegram.set_last_run(now)
 
@@ -49,18 +54,18 @@ def check(top_logger, telegram, queue):
         if now < item.period.start <= (now + timedelta(10)) and not item.handled:
             top_logger.gym = item.gym
             available_slots = top_logger.available_slots(item.period)
-            available += len(available_slots)
             if available_slots:
-                notify(telegram, available_slots)
+                notify(telegram, item, available_slots)
                 item.set_handled(True)
+                available += len(available_slots)
 
     # TODO: add proper logging
-    print(f"{datetime.now()}  --  FINISH: found {available} slots")
+    print(f"{datetime.now()}  --  FINISH: found {available} new slots")
 
     return available
 
 
-def repeat(top_logger, telegram, interval, queue):
+def repeat(top_logger: TopLogger, telegram: TelegramBot, queue: List[QueueItem], interval: int):
     """Run check each INTERVAL seconds."""
     check(top_logger, telegram, queue)
 
@@ -68,7 +73,7 @@ def repeat(top_logger, telegram, interval, queue):
         minimal_interval = 1 if config.DEBUG else 30
         interval = max(minimal_interval, interval)
         time.sleep(interval)
-        repeat(top_logger, telegram, interval, queue)
+        repeat(top_logger, telegram, queue, interval)
 
 
 def main():
@@ -83,7 +88,7 @@ def main():
     telegram_bot.set_queue(queue)
 
     # start schedule
-    repeat(top_logger, telegram_bot, config.INTERVAL, queue)
+    repeat(top_logger, telegram_bot, queue, config.INTERVAL)
 
 
 if __name__ == '__main__':

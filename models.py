@@ -1,140 +1,111 @@
 """All class types used in this script."""
+from __future__ import annotations
+
+from datetime import datetime
+
+from dataclasses import dataclass
+from dataclasses import field
+from dataclasses_json import config
+from dataclasses_json import dataclass_json
+from dataclasses_json import Undefined
 from dateutil.parser import parse
+from dateutil.tz import gettz
 
 
-class QueueItem:
-
+@dataclass
+class Period:
     """
-    Class for holding Item data used for queueing checks for a slot.
-    """
+    Object for holding period data.
 
-    def __init__(self, gym, period, handled=False):
-        self.gym = gym
-        self.period = period
-        self.handled = handled
+    A period has a start and an end date, that's all.
+    """
+    start: datetime
+    end: datetime
+
+    @classmethod
+    def from_strings(cls, start: str, end: str) -> Period:
+        """Create instance of Period from to 'date' strings.
+
+        The start and end strings are converted to datetime objects by dateutil.parser.parse
+        """
+        tzinfo = gettz()
+        return cls(parse(start).replace(tzinfo=tzinfo), parse(end).replace(tzinfo=tzinfo))
 
     def __str__(self):
+        """String representations of this dataclass"""
+        return f"Start: {self.start}, End: {self.end}"
+
+
+@dataclass
+class QueueItem:
+    """
+    Dataclass for queued items, an item represents a period which need to be checked.
+
+    An item consists of a gym and a period. The property handled is set when a notification is sent
+    for an available slot.
+    """
+    gym: dict
+    period: Period
+    handled: bool = False
+
+    def __str__(self):
+        """String representations of this dataclass"""
         notified = ' NOTIFIED' if self.handled else ''
-        return f"{self.gym['name']}  ::  {self.period.start.date()} " \
+        return f"{self.gym['name']}  ->  {self.period.start.date().strftime('%a %d %b')} " \
                f"{self.period.start.strftime('%H:%M')} - {self.period.end.strftime('%H:%M')}" \
-               f"{notified }"
+               f"{notified}"
 
     def set_handled(self, handled):
         """Set handled property."""
         self.handled = handled
 
 
-class Period:
-
-    """
-    Object for holding period data.
-
-    A period has a start and an end date, that's all.
-    """
-
-    def __init__(self, start, end):
-        self.start = parse(start)
-        self.end = parse(end)
-
-    def __str__(self):
-        return f"Start: {self.start}, End: {self.end}"
-
-
+@dataclass_json(undefined=Undefined.EXCLUDE)
+@dataclass
 class Gym:
-
     """
-    Class for holding data of a TopLogger gym.
+    Dataclass for TopLogger gym.
 
-    A JSON slot looks like this:
-    {
-    "id": 38,
-    "id_name": "delfts_bleau",
-    "slug": "delfts-bleau",
-    "name": "Delfts Bleau",
-    "name_short": "Delfts Bleau",
-    "live": true,
-    "latitude": "51.9946241",
-    "longitude": "4.3675542",
-    "address": "Schieweg 15",
-    "city": "Delft",
-    "postal_code": "2627 AN",
-    "country": "NL",
-    "url_website": "https://www.delftsbleau.nl/",
-    "url_facebook": "https://www.facebook.com/DelftsBleau",
-    "phone_number": "+31 15 7600090",
-    "nr_of_climbs": 174,
-    "nr_of_routes": 0,
-    "nr_of_boulders": 174,
-    "my_ascends_count": 0,
-    "local_device_pwd": "ea51ac65ccc9f3e2ed3037ed8132f3f8b15bc612",
-    "serializer": "list",
-    "scale_collapse_climbs": "0.4",
-    "scale_collapse_walls": "0.1",
-    "gym_resources": []
-    }
+    Only a few properties are saved others aren't needed for this script.
     """
-
-    def __init__(self, gym):
-        """Initialize object based on JSON slot object."""
-        self.id = gym['id']
-        self.name = gym["id_name"]
-        self.slug = gym["slug"]
-        self.name = gym["name"]
-        self.name_short = gym["name_short"]
+    id: int
+    name: str
+    slug: str
 
 
+@dataclass_json
+@dataclass
 class ReservationArea:
-
     """
-    Class for holding reservation area objects.
+    Dataclass for TopLogger Reservation Area for a gym.
 
-    The JSON of this class looks like this
-    {
-        "id": 31,
-        "name": "Bouldering",
-        "capacity": 72
-    }
+    Not all gyms have reservation area(s).
     """
-
-    def __init__(self, area):
-        """Initialize object based on JSON reservation_area object."""
-        self.id = area['id']
-        self.name = area['name']
-        self.capacity = area['capacity']
+    id: int
+    name: str
+    capacity: int
 
 
+@dataclass_json(undefined=Undefined.EXCLUDE)
+@dataclass
 class Slot:
-
     """
-    Class for holding data of a Toplogger slot.
+    Dataclass for Toplogger slot.
 
-    A JSON slot looks like this:
-    {
-        "id": 92119,
-        "reservation_area_id": 31,
-        "start_at": "2020-10-12T16:30:00.000+02:00",
-        "end_at": "2020-10-12T18:30:00.000+02:00",
-        "checkinend_at": "2020-10-12T16:45:00.000+02:00",
-        "spots": 16,
-        "spots_booked": 8,
-        "details": null,
-        "live": true
-    }
+    Only a few properties are saved others aren't needed for this script.
     """
-
-    def __init__(self, slot):
-        """Initialize object based on JSON slot object."""
-        start_at = parse(slot['start_at'])
-        end_at = parse(slot['end_at'])
-        self.id = slot['id']
-        self.spots = slot['spots']
-        self.spots_booked = slot['spots_booked']
-        self.live = slot['live']
-        self.date = start_at.date()
-        self.start_time = start_at.time()
-        self.end_time = end_at.time()
+    id: int
+    start_at: datetime = field(metadata=config(encoder=datetime.isoformat, decoder=parse))
+    end_at: datetime = field(metadata=config(encoder=datetime.isoformat, decoder=parse))
+    spots: int
+    spots_booked: int
 
     @property
-    def spots_available(self):
+    def date(self) -> datetime:
+        """The date of this slot, based on the start datetime."""
+        return self.start_at.date()
+
+    @property
+    def spots_available(self) -> int:
         """Calculate how many spots are available for this slot."""
         return self.spots - self.spots_booked

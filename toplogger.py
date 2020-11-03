@@ -1,6 +1,12 @@
 """Module for interaction with TopLogger."""
+from typing import Optional
+from typing import List
+from typing import Dict
+
 import requests
 
+from models import Period
+from models import ReservationArea
 from models import Slot
 
 
@@ -10,7 +16,8 @@ class TopLogger:
     Handle communication with TopLogger REST API.
     """
 
-    def __init__(self, user=None, password=None, gym=None):
+    def __init__(self, user: Optional[str] = None, password: Optional[str] = None,
+                 gym: Optional[Dict[str, any]] = None):
         self.user = user
         self.password = password
         self.host = 'https://api.toplogger.nu'
@@ -34,22 +41,23 @@ class TopLogger:
         self.token = content['authentication_token']
         self.userid = content['user_id']
 
-    def available_slots(self, period):
+    def available_slots(self, period: Period) -> List[Slot]:
         """Get available slots in given period."""
         if not self.gym:
             raise Exception('Gym cannot be None')
+
         slots = self._get(f"gyms/{self.gym['id']}/slots?date={period.start.date()}&"
-                          f"reservation_area_id={self.gym['area_id']}&slim=true")
+                          f"reservation_area_id={self.gym['area_id']}")
         available_slots = []
         for slot in slots:
-            slot = Slot(slot)
-            if slot.live and slot.start_time >= period.start.time() \
-                    and slot.end_time <= period.end.time():
-                if slot.spots > slot.spots_booked:
-                    available_slots.append(slot)
+            print(slot)
+            slot = Slot.from_dict(slot)  # pylint: disable=maybe-no-member
+            if (slot.start_at >= period.start and slot.end_at <= period.end
+                    and slot.spots > slot.spots_booked):
+                available_slots.append(slot)
         return available_slots
 
-    def reservation_areas(self):
+    def reservation_areas(self) -> ReservationArea:
         """Get reservation_areas."""
         if not self.gym:
             raise Exception('Gym cannot be None')

@@ -15,15 +15,18 @@ CHAT_ID = ''
 DEBUG = False
 # Time in seconds between to checks, minimal=30, -1 => do not repeat
 INTERVAL = 60 * 60
+
+# Add here your gyms, EG:
+# The list of gyms can be found here:
+# https://api.toplogger.nu/v1/gyms
+# Find your favorite gym and check for reservation_areas. If there are reservation areas fill
+# in the id, if not remove area_id.
 GYMS = {
-    # Add here your gym, EG:
-    # The list of gyms can be found here:
-    # https://api.toplogger.nu/v1/gyms
-    # Find your favorite gym and check for reservation_areas. If there are reservation areas fill
-    # in the id, if not remove area_id.
-    # 'be_boulder_amsterdam': {'id': 100, 'area_id': 65},
+    # 'be_amsterdam': {'id': 100, 'area_id': 65},
 }
+
+# Add here your periods of interest for a gym from the GYMS dictionary. All available slots which
+# start and end in this period will be notified.
 QUEUE = [
-    # Add here your periods of interest, EG:
-    # QueueItem(GYMS['be_boulder_amsterdam'], Period('2020-10-16 11:30', '2020-10-16 14:30')),
+    # QueueItem(GYMS['be_amsterdam'], Period.from_strings('2020-10-16 11:30', '2020-10-16 14:30')),
 ]
