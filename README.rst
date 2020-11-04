@@ -1,4 +1,5 @@
-
+TOPLOGGER NOTIFIER
+******************
 
 .. image:: https://github.com/uipko/toplogger_notifier/workflows/Pylint/badge.svg?branch=main
    :target: https://github.com/uipko/toplogger_notifier/
@@ -133,7 +134,6 @@ the order of implementation.
 
 Idea's for new features:
 
-- Add logging
 - Setup pytest tests for existing code
 - Persist data between runs
 - List current reservations

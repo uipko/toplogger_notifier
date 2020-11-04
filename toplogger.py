@@ -1,4 +1,5 @@
 """Module for interaction with TopLogger."""
+import logging
 from typing import Optional
 from typing import List
 from typing import Dict
@@ -30,7 +31,7 @@ class TopLogger:
         """Start session for REST API."""
         url = f'{self.host}/users/sign_in.json'
         data = {
-            'user':{
+            'user': {
                 'email': self.user,
                 'password': self.password
             }
@@ -50,7 +51,6 @@ class TopLogger:
                           f"reservation_area_id={self.gym['area_id']}")
         available_slots = []
         for slot in slots:
-            print(slot)
             slot = Slot.from_dict(slot)  # pylint: disable=maybe-no-member
             if (slot.start_at >= period.start and slot.end_at <= period.end
                     and slot.spots > slot.spots_booked):
@@ -71,7 +71,7 @@ class TopLogger:
 
     def _get(self, path):
         url = f"{self.host}/{self.version}/{path}"
-        print(url)
+        logging.info(f'Call: {url}')
         response = requests.get(url)
         response.raise_for_status()
         return response.json()
