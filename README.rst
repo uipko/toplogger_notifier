@@ -9,6 +9,11 @@ TOPLOGGER NOTIFIER
    :alt: Codacy Badge
    :target: https://app.codacy.com/gh/uipko/toplogger_notifier?utm_source=github.com&utm_medium=referral&utm_content=uipko/toplogger_notifier&utm_campaign=Badge_Grade
 
+.. image:: https://img.shields.io/badge/python-3.7+-blue.svg
+   :alt: Python 3.7+
+   :target: https://www.python.org/downloads/
+
+
 Table of contents
 =================
 
@@ -50,6 +55,9 @@ if and when this will feature will be implemented.
 
 Prerequisites
 =============
+This script is tested on Python 3.8. As far as I know this script needs at least python 3.7 because
+of the use of "from __future__ import annotations" (models.py)
+
 The following accounts are needed for this script to work.
 
 TopLogger account
