@@ -16,11 +16,11 @@ DEBUG = False
 # Time in seconds between to checks, minimal=30, -1 => do not repeat
 INTERVAL = 60 * 60
 
-# Add here your gyms, EG:
+# Add here your favorite gyms.
 # The list of gyms can be found here:
 # https://api.toplogger.nu/v1/gyms
-# Find your favorite gym and check for reservation_areas. If there are reservation areas fill
-# in the id, if not remove area_id.
+# Find your favorite gym and check for reservation_areas here.
+# https://api.toplogger.nu/v1/gyms/<YOUR GYM ID>/reservation_areas
 GYMS = {
     # 'be_amsterdam': {'id': 100, 'area_id': 65},
 }
