@@ -22,7 +22,7 @@ INTERVAL = 60 * 60
 # Find your favorite gym and check for reservation_areas here.
 # https://api.toplogger.nu/v1/gyms/<YOUR GYM ID>/reservation_areas
 GYMS = {
-    # 'be_amsterdam': {'id': 100, 'area_id': 65},
+    # 'be_amsterdam': {'id': 100, 'area_id': 65, 'name': 'Be Boulder Amsterdam'},
 }
 
 # Add here your periods of interest for a gym from the GYMS dictionary. All available slots which
